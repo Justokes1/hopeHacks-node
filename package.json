@@ -1,0 +1,25 @@
+{
+  "name": "hopehacks-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Justokes1/hopeHacks-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Justokes1/hopeHacks-node/issues"
+  },
+  "homepage": "https://github.com/Justokes1/hopeHacks-node#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.18"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
