@@ -1,10 +1,15 @@
 
 const express = require('express');
+const morgan = require('morgan');
+const { Prohairesis } = require("prohairesis");
+const bodyParser = require("body-parser");
+const dotenv = require('dotenv');
 const router = express.Router();
 const db = require('../hope');
 router.get('/form', function (req, res, next) {
     res.render('contact');
 });
+dotenv.config();
 
 const app = express();
 
@@ -22,7 +27,7 @@ conn.connect(function (err) {
     console.log('Database is connected successfully !');
 });
 
-connection.query('INSERT INTO contact(id, firstName, lastName, email, phone, message) VALUES (1, Sammie, Stephenson, sstephenson@r2hstudent.org, 7047755693, "hello world") ', (err, rows) => {
+connection.query('INSERT INTO hope.contact(id, firstName, lastName, email, phone, message) VALUES (1, Sammie, Stephenson, sstephenson@r2hstudent.org, 7047755693, "hello world") ', (err, rows) => {
     if (err) {
         throw err
     } else {
@@ -33,8 +38,21 @@ connection.query('INSERT INTO contact(id, firstName, lastName, email, phone, mes
 
 const PORT = process.env.PORT || 3306;
 app.listen(PORT);
-
 console.log("App is listening on port " + port);
+
+const sqlString = process.env.CLEARDB_DATABASE_URL;
+const database = new Prohairesis(sqlString);
+
+app
+    .use(morgan("dev"))
+    .use(express.static('public'))
+
+    .use(bodyParser.urlencoded({ extended: false }))
+    .use(bodyParser.json())
+
+    .get('/api/user', async (req, res) => {
+
+    })
 
 app.get('/', (req, res) => {
     res.send('got it')
@@ -52,7 +70,7 @@ router.post('/create', function (req, res, next) {
     const userDetails = req.body;
 
     // insert user data into users table
-    var sql = 'INSERT INTO contact SET ?';
+    var sql = 'INSERT INTO hope.contact SET ?';
     db.query(sql, userDetails, function (err, data) {
         if (err) throw err;
         console.log("Contact data is inserted successfully ");
@@ -62,7 +80,7 @@ router.post('/create', function (req, res, next) {
 module.exports = router;
 
 app.get("/", (req, res) => {
-    connection.query('SELECT * from contact LIMIT 1', (err, rows) => {
+    connection.query('SELECT * from hope.contact LIMIT 1', (err, rows) => {
         if (err) throw err;
         console.log('The data from users table are: \n', rows);
         connection.end();
